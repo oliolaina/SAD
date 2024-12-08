@@ -5,31 +5,38 @@ function DocumentList({ type }) {
   const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
-    const fetchDocuments = async () => { // Убираем параметр `type` из этой функции
-        const token = localStorage.getItem("token");
-        try {
-            console.log("Отправляем запрос с параметром type:", type);
-            const response = await axios.get("/documents", {
-                params: { type }, // Используем `type` из props
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            console.log("Ответ сервера:", response.data);
-            setDocuments(response.data);
-        } catch (error) {
-            console.error("Ошибка получения документов:", error.response?.data || error.message);
-        }
+    const fetchDocuments = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        console.log("Отправляем запрос с параметром type:", type);
+        const response = await axios.get("/documents", {
+          params: { type }, // incoming или outgoing
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("Ответ сервера:", response.data);
+        setDocuments(response.data);
+      } catch (error) {
+        console.error("Ошибка получения документов:", error.response?.data || error.message);
+      }
     };
 
-    fetchDocuments(); // Вызываем функцию без параметров
-}, [type]); // Добавляем `type` как зависимость
-
+    fetchDocuments();
+  }, [type]);
 
   return (
     <div>
       <h2>{type === "incoming" ? "Входящие" : "Исходящие"} документы</h2>
       <ul>
         {documents.map((doc, index) => (
-          <li key={index}>{doc.title}</li>
+          <li key={index}>
+            {doc.title}
+            {type === "incoming" && doc.sender && (
+              <span> (Отправитель: {doc.sender.username})</span>
+            )}
+             {type === "outgoing" && doc.receiver && (
+              <span> (Получатель: {doc.receiver.username})</span>
+            )}
+          </li>
         ))}
       </ul>
     </div>
