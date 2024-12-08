@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../axiosConfig";
 
 
 
@@ -12,7 +12,7 @@ function Register({ setUser }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/register", { username, password });
+      await axios.post("/register", { username, password });
       setUser(username); // Сохраняем имя пользователя
       navigate("/dashboard");
     } catch {

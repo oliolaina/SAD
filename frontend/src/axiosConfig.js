@@ -1,12 +1,15 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8000";
+const API_URL = "https://localhost/api";
+
+
+axios.defaults.baseURL = API_URL;
 axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
 });
 
 export default axios;

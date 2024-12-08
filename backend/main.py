@@ -13,7 +13,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Настройка CORS
+# Настройка CORSa
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

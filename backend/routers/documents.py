@@ -39,7 +39,7 @@ from typing import Literal
 
 
 
-@router.get("/documents", response_model=list[DocumentResponse])
+@router.get("/api/documents", response_model=list[DocumentResponse])
 def get_documents(
     type: str,
     db: Session = Depends(get_db),
@@ -87,7 +87,7 @@ def get_documents(
 
 
 
-@router.post("/documents", response_model=DocumentResponse)
+@router.post("/api/documents", response_model=DocumentResponse)
 def create_document(
     doc: DocumentCreate,
     db: Session = Depends(get_db),

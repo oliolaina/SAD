@@ -1,22 +1,19 @@
-
 services:
   frontend:
     build:
       context: ./frontend
     ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      - "3000:3000"  
+    networks:
+      - app-network
 
   backend:
     build:
       context: ./backend
-    ports:
+    expose:
       - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/documents
+    networks:
+      - app-network
 
   db:
     build:
@@ -24,12 +21,27 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: documents
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
     ports:
-      - "5432:5432"
-    restart: always
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   db_data:

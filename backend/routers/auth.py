@@ -52,7 +52,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
-@router.post("/login", response_model=Token)
+@router.post("/api/login", response_model=Token)
 def login(credentials: UserCredentials, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == credentials.username).first()
     if not user or user.password != credentials.password:
